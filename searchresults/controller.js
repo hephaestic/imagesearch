@@ -33,19 +33,15 @@ exports.newSearch = function(req, res){
     }else if(!response.statusCode == 200){
       res.json({error: res.statusCode});
     }else{
-      var items = JSON.parse(body).items;
-      var results = [];
-      //pull relevant info from each search reult
-      for(var i = 0; i < items.length; i++){
-        var item = items[i];
-        var result = {
-          imageurl: item.link,
-          alttext: item.snippet,
-          pageurl: item.image.contextLink
+      var results = JSON.parse(body).items;
+      var simplifiedresults = results.map(function(result){
+        return {
+          imageurl: result.link,
+          alttext: result.snippet,
+          pageurl: result.image.contextLink
         }
-        results.push(result);
-      }
-      res.json(results);
+      });
+      res.json(simplifiedresults);
     }
   });
 }
